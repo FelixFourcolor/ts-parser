@@ -1,5 +1,5 @@
-import type { evaluate } from "./examples/arithmetic";
-import type { parseJson } from "./examples/json";
+import type { evaluate } from "./lib/arithmetic";
+import type { parseJson } from "./lib/json";
 
 type _arithmetic = evaluate<`
 	-(-4(7-1) - 2*-3 + 1.9) + -2/3.2(2+-9) * --4(+11/2*+5)

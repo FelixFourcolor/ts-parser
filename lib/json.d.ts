@@ -1,3 +1,4 @@
+import type { $, Fn, List, Num, Str } from "./helpers";
 import type {
 	char,
 	choice,
@@ -11,8 +12,7 @@ import type {
 	parse,
 	pure,
 	spaces,
-} from "@/parser";
-import type { $, Fn, List, Num, Str } from "@/utils";
+} from "./parser";
 
 export type parseJson<s extends string> = parse<token<value>, s>;
 
