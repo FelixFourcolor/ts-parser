@@ -1,4 +1,4 @@
-import type { $, Fn, List, Str } from "./helpers/";
+import type { $, Fn, List } from "./helpers/";
 
 export type parse<p extends Parser, input extends string> =
 	$<p, "<|", input> extends infer res
@@ -13,7 +13,8 @@ export type parse<p extends Parser, input extends string> =
 
 // Passing _T into Success causes wrong type inference.
 // But just keep it to allow type annotation for readability
-export type Parser<_T = unknown> = Fn<string, Success | Failure>;
+export type Parser<_T = unknown> = Fn<string, Result>;
+export type Result = Success | Failure;
 export type Success<result = unknown, remaining extends string = string> = {
 	result: result;
 	remaining: remaining;
@@ -150,12 +151,22 @@ export interface notChar<c extends string> extends Parser {
 		: Failure<"Unexpected end of input">;
 }
 
-export type literal<
-	s extends string,
-	acc extends Parser = pure<"">,
-> = s extends `${infer head}${infer tail}`
-	? literal<tail, $<acc, "<&>", char<head>, ">>|", Str.concat>>
-	: acc;
+export interface literal<s extends string> extends Parser {
+	return: literal.collapseUnion<
+		s extends s
+			? this["arg"] extends `${s}${infer remaining}`
+				? Success<s, remaining>
+				: Failure
+			: never,
+		Failure<`Expected ${s}`>
+	>;
+}
+declare namespace literal {
+	type collapseUnion<
+		res extends Result,
+		err extends Failure,
+	> = res extends Success ? res : err;
+}
 
 export type spaces = many<$<char<" ">, "<|>", char<"\t">, "<|>", char<"\n">>>;
 
