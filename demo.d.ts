@@ -17,7 +17,7 @@ type _json = parseJson<`
 		"type-level"
 	],
 	"devDependencies": {
-		"@typescript/native-preview": "7.0.0-dev.20260330.1",
+		"typescript": "^7.0.2",
 		"ts-arithmetic": "^0.1.1"
 	}
 }
